@@ -2,12 +2,10 @@ import { test, expect } from '@playwright/test';
 
 test('Log in and Dashboard Checks', async ({ page }) => {
   await page.goto('https://admin.dev.budgetnista-admin.qilinlab.com/login');
-  await page.getByRole('textbox', { name: 'admin@gmail.com' }).click();
   await page.getByRole('textbox', { name: 'admin@gmail.com' }).fill('superadmin@yopmail.com');
-  await page.getByRole('textbox', { name: 'admin@gmail.com' }).press('Tab');
-  await page.getByRole('link', { name: 'Forgot Password?' }).press('Tab');
   await page.getByRole('textbox', { name: 'Enter password' }).fill('Admin@123');
   await page.getByRole('button', { name: 'Sign in' }).click();
+  await page.waitForURL(/(?!.*login)/, { timeout: 15000 });
   await expect(page.getByRole('heading', { name: 'Analytics' })).toBeVisible();
   await page.getByRole('link', { name: 'Organizations' }).click();
   await expect(page.getByRole('banner').getByRole('heading', { name: 'Organizations' })).toBeVisible();
