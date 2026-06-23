@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "auth:save": "npx playwright test tests/auth.setup.manual.js --project=setup-manual",
+    "test": "npx playwright test tests/auth.spec.js tests/example.spec.js",
+    "test:auth": "npx playwright test tests/auth.spec.js",
+    "test:nav": "npx playwright test tests/example.spec.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

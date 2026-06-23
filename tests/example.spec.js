@@ -1,48 +1,58 @@
 import { test, expect } from '@playwright/test';
+import { waitForRecaptcha } from './helpers/auth.js';
 
-test('Log in and Dashboard Checks', async ({ page }) => {
-  await page.goto('https://admin.dev.budgetnista-admin.qilinlab.com/login');
-  await page.getByRole('textbox', { name: 'admin@gmail.com' }).fill('superadmin@yopmail.com');
-  await page.getByRole('textbox', { name: 'Enter password' }).fill('Admin@123');
-  await page.getByRole('button', { name: 'Sign in' }).click();
-  await page.waitForURL(/(?!.*login)/, { timeout: 15000 });
-  await expect(page.getByRole('heading', { name: 'Analytics' })).toBeVisible();
-  await page.getByRole('link', { name: 'Organizations' }).click();
-  await expect(page.getByRole('banner').getByRole('heading', { name: 'Organizations' })).toBeVisible();
-  await page.getByRole('link', { name: 'Divisions & Access' }).click();
-  await expect(page.getByRole('banner').getByRole('heading', { name: 'Divisions & Access' })).toBeVisible();
-  await page.getByRole('link', { name: 'Users' }).click();
-  await expect(page.getByRole('banner').getByRole('heading', { name: 'Users' })).toBeVisible();
-  await page.getByRole('link', { name: 'Invitees' }).click();
-  await expect(page.getByRole('banner').getByRole('heading', { name: 'Invitees' })).toBeVisible();
-  await page.getByRole('link', { name: 'Courses' }).click();
-  await expect(page.getByRole('banner').getByRole('heading', { name: 'Courses' })).toBeVisible();
-  await page.getByRole('link', { name: 'Media library' }).click();
-  await expect(page.getByRole('banner').getByRole('heading', { name: 'Media library' })).toBeVisible();
-  await page.getByRole('link', { name: 'Instructors' }).click();
-  await expect(page.getByRole('banner').getByRole('heading', { name: 'Instructors' })).toBeVisible();
-  await page.getByRole('link', { name: 'Bundles' }).click();
-  await expect(page.getByRole('banner').getByRole('heading', { name: 'Bundles' })).toBeVisible();
-  await page.getByRole('link', { name: 'Module Library' }).click();
-  await expect(page.getByRole('banner').getByRole('heading', { name: 'Module Library' })).toBeVisible();
-  await page.getByRole('link', { name: 'Pathways' }).click();
-  await expect(page.getByRole('banner').getByRole('heading', { name: 'Pathways' })).toBeVisible();
-  await page.getByRole('link', { name: 'Forums' }).click();
-  await expect(page.getByRole('heading', { name: 'Forums' })).toBeVisible();
-  await page.getByRole('link', { name: 'Moderation' }).click();
-  await expect(page.getByRole('heading', { name: 'Moderation', exact: true })).toBeVisible();
-  await page.getByRole('link', { name: 'Rewards' }).click();
-  await expect(page.getByRole('banner').getByRole('heading', { name: 'Rewards' })).toBeVisible();
-  await page.getByRole('link', { name: 'Products' }).click();
-  await expect(page.getByRole('banner').getByRole('heading', { name: 'Products' })).toBeVisible();
-  await page.getByRole('link', { name: 'Transactions' }).click();
-  await expect(page.getByRole('banner').getByRole('heading', { name: 'Transactions' })).toBeVisible();
-  await page.getByRole('link', { name: 'Billing' }).click();
-  await expect(page.getByRole('banner').getByRole('heading', { name: 'Billing' })).toBeVisible();
-  await page.getByRole('link', { name: 'Settings' }).click();
-  await expect(page.getByRole('heading', { name: 'Settings' })).toBeVisible();
-  await page.getByLabel('Primary').getByRole('link', { name: 'Notifications' }).click();
-  await expect(page.getByRole('banner').getByRole('heading', { name: 'Notifications' })).toBeVisible();
-  await page.getByRole('button', { name: 'Sign out' }).click();
-  await expect(page.getByRole('heading', { name: 'Welcome back' })).toBeVisible();
+// Session is pre-authenticated via auth.setup.js — no login step needed here.
+
+test.describe('Dashboard navigation', () => {
+  test.beforeEach(async ({ page }) => {
+    // If the saved session expired, the app may redirect back to /login.
+    // waitForRecaptcha() ensures the sign-in form is ready before any re-auth attempt.
+    await waitForRecaptcha(page);
+    await page.goto('/');
+    await expect(page.getByRole('heading', { name: 'Analytics' })).toBeVisible({ timeout: 15000 });
+  });
+
+  test('Analytics dashboard loads', async ({ page }) => {
+    await expect(page.getByRole('heading', { name: 'Analytics' })).toBeVisible();
+  });
+
+  // Each entry: nav link text, expected heading, whether it lives inside the <banner>
+  const pages = [
+    { link: 'Organizations',      heading: 'Organizations',      inBanner: true  },
+    { link: 'Divisions & Access', heading: 'Divisions & Access', inBanner: true  },
+    { link: 'Users',              heading: 'Users',              inBanner: true  },
+    { link: 'Invitees',           heading: 'Invitees',           inBanner: true  },
+    { link: 'Courses',            heading: 'Courses',            inBanner: true  },
+    { link: 'Media library',      heading: 'Media library',      inBanner: true  },
+    { link: 'Instructors',        heading: 'Instructors',        inBanner: true  },
+    { link: 'Bundles',            heading: 'Bundles',            inBanner: true  },
+    { link: 'Module Library',     heading: 'Module Library',     inBanner: true  },
+    { link: 'Pathways',           heading: 'Pathways',           inBanner: true  },
+    { link: 'Forums',             heading: 'Forums',             inBanner: false },
+    { link: 'Moderation',         heading: 'Moderation',         inBanner: false, exact: true },
+    { link: 'Rewards',            heading: 'Rewards',            inBanner: true  },
+    { link: 'Products',           heading: 'Products',           inBanner: true  },
+    { link: 'Transactions',       heading: 'Transactions',       inBanner: true  },
+    { link: 'Billing',            heading: 'Billing',            inBanner: true  },
+    { link: 'Settings',           heading: 'Settings',           inBanner: false },
+  ];
+
+  for (const { link, heading, inBanner, exact } of pages) {
+    test(`${heading} page loads`, async ({ page }) => {
+      await page.getByRole('link', { name: link }).click();
+      const locator = inBanner
+        ? page.getByRole('banner').getByRole('heading', { name: heading, exact })
+        : page.getByRole('heading', { name: heading, exact });
+      await expect(locator).toBeVisible({ timeout: 10000 });
+    });
+  }
+
+  test('Notifications page loads via Settings', async ({ page }) => {
+    await page.getByRole('link', { name: 'Settings' }).click();
+    await expect(page.getByRole('heading', { name: 'Settings' })).toBeVisible({ timeout: 10000 });
+    await page.getByLabel('Primary').getByRole('link', { name: 'Notifications' }).click();
+    await expect(
+      page.getByRole('banner').getByRole('heading', { name: 'Notifications' })
+    ).toBeVisible({ timeout: 10000 });
+  });
 });
