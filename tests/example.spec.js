@@ -1,13 +1,82 @@
 import { test, expect } from '@playwright/test';
-import { waitForRecaptcha } from './helpers/auth.js';
+import { config as loadEnv } from 'dotenv';
+import { EMAIL } from './helpers/auth.js';
+
+loadEnv();
 
 // Session is pre-authenticated via auth.setup.js — no login step needed here.
 
+// When auth.setup.js uses the reCAPTCHA mock (fake tokens), the backend returns
+// 401 on all API calls. These interceptors prevent that 401 from triggering a
+// login redirect so the dashboard navigation tests can verify page headings.
+const BACKEND = /budgetnista-be-production\.up\.railway\.app/;
+
 test.describe('Dashboard navigation', () => {
   test.beforeEach(async ({ page }) => {
-    // If the saved session expired, the app may redirect back to /login.
-    // waitForRecaptcha() ensures the sign-in form is ready before any re-auth attempt.
-    await waitForRecaptcha(page);
+    // Playwright routes use LIFO order. Register from lowest to highest specificity:
+    // general backend → module-library generic → facets → profile.
+
+    // 1. Blanket mock — paginated shape for list endpoints.
+    await page.route(BACKEND, route =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          success: true,
+          data: { results: [], count: 0, next: null, previous: null },
+        }),
+      })
+    );
+
+    // 2. Module Library — the component does `U?.lesson_types.length` which throws when
+    // lesson_types is absent. Include it and other facet fields to prevent crashes.
+    await page.route(
+      /budgetnista-be-production\.up\.railway\.app\/api\/v1\/admin\/module-library\//,
+      route =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            success: true,
+            data: {
+              results: [],
+              count: 0,
+              next: null,
+              previous: null,
+              archived_count: 0,
+              lesson_types: [],
+              module_types: [],
+              categories: [],
+              tags: [],
+              filters: [],
+            },
+          }),
+        })
+    );
+
+    // 3. Profile endpoint needs a shaped user object (LIFO wins over blanket mock).
+    await page.route(
+      /budgetnista-be-production\.up\.railway\.app\/api\/v1\/admin\/auth\/profile\/?/,
+      route =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            success: true,
+            data: {
+              id: 1,
+              email: EMAIL,
+              first_name: 'Test',
+              last_name: 'Admin',
+              role: 'super_admin',
+              is_active: true,
+            },
+          }),
+        })
+    );
+  });
+
+  test.beforeEach(async ({ page }) => {
     await page.goto('/');
     await expect(page.getByRole('heading', { name: 'Analytics' })).toBeVisible({ timeout: 15000 });
   });

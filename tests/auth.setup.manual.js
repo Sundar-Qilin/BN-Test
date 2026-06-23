@@ -10,6 +10,11 @@
 import { test as setup } from '@playwright/test';
 import { AUTH_FILE } from './helpers/auth.js';
 
+// Guard: skip when not explicitly invoked via `npm run auth:save`.
+// Without this, `npx playwright test` runs this project headlessly, waits 2 min
+// for human input, and times out.
+setup.skip(!process.env.MANUAL_AUTH, 'Run via npm run auth:save (sets MANUAL_AUTH=1)');
+
 setup('save auth state via manual login', async ({ page }) => {
   setup.setTimeout(150000); // 2.5 min — time for a human to log in
   await page.goto('/login');

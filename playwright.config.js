@@ -13,10 +13,14 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
+  // 60 s per test — remote navigation to a cold server can exceed the 30 s default.
+  timeout: 60000,
   use: {
     baseURL: BASE_URL,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
+    // Explicit navigation timeout so page.goto / waitForURL have headroom on slow networks.
+    navigationTimeout: 45000,
   },
 
   projects: [
@@ -28,6 +32,7 @@ export default defineConfig({
       testMatch: /auth\.setup\.js$/,
       use: {
         ...devices['Desktop Chrome'],
+        headless: false,
         launchOptions: {
           args: ['--disable-blink-features=AutomationControlled'],
         },
@@ -49,6 +54,7 @@ export default defineConfig({
 
     // ── Auth flow tests ────────────────────────────────────────────────────────
     // Tests the login page itself — run without any stored session.
+    // Login & logout flow tests require RECAPTCHA_BYPASS_TOKEN accepted by the backend.
     {
       name: 'auth',
       use: { ...devices['Desktop Chrome'] },

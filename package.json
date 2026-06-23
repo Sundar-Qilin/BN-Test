@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "auth:save": "npx playwright test tests/auth.setup.manual.js --project=setup-manual",
+    "auth:save": "cross-env MANUAL_AUTH=1 npx playwright test tests/auth.setup.manual.js --project=setup-manual",
     "test": "npx playwright test tests/auth.spec.js tests/example.spec.js",
     "test:auth": "npx playwright test tests/auth.spec.js",
     "test:nav": "npx playwright test tests/example.spec.js"
@@ -15,7 +15,8 @@
   "type": "commonjs",
   "devDependencies": {
     "@playwright/test": "^1.61.0",
-    "@types/node": "^26.0.0"
+    "@types/node": "^26.0.0",
+    "cross-env": "^10.1.0"
   },
   "dependencies": {
     "dotenv": "^17.4.2"
