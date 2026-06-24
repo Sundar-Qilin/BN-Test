@@ -10,9 +10,9 @@ export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 2 : 1,
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  reporter: [['html'], ['json', { outputFile: 'playwright-report/results.json' }], ['list']],
   // 60 s per test — remote navigation to a cold server can exceed the 30 s default.
   timeout: 60000,
   use: {

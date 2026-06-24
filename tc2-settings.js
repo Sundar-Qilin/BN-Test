@@ -1,0 +1,89 @@
+// STNG — Settings (all sub-sections) — 70 cases
+module.exports = [
+  {
+    code: 'STNG',
+    title: 'Settings & Configuration',
+    cases: [
+      // ── General Settings ───────────────────────────────────────────────────
+      { id:'ST-001', name:'Settings page loads with sub-section navigation', pre:'Logged in as super_admin', steps:'1. Click Settings in sidebar', expected:'Settings page with sub-navigation: General, Notifications, Email Templates, Integrations, API, Security, Branding', priority:'Critical', type:'Positive' },
+      { id:'ST-002', name:'General settings — update site/platform name', pre:'General settings open', steps:'1. Change "Platform Name" to "MyLearningPortal"\n2. Save', expected:'Platform name updated; shown in header and emails', priority:'High', type:'Positive' },
+      { id:'ST-003', name:'General settings — blank platform name rejected', pre:'General settings', steps:'1. Clear platform name field\n2. Save', expected:'Required field error', priority:'High', type:'Validation' },
+      { id:'ST-004', name:'General settings — change timezone', pre:'General settings', steps:'1. Select "America/New_York" timezone\n2. Save', expected:'All date/time displays reflect new timezone', priority:'High', type:'Positive' },
+      { id:'ST-005', name:'General settings — change default language', pre:'General settings', steps:'1. Select "French" from language dropdown\n2. Save', expected:'UI language preference changed; emails sent in French if template available', priority:'Medium', type:'Positive' },
+      { id:'ST-006', name:'General settings — upload platform logo', pre:'General settings', steps:'1. Upload valid logo image\n2. Save', expected:'Logo updated in header and branding', priority:'High', type:'Positive' },
+      { id:'ST-007', name:'General settings — upload favicon', pre:'General settings', steps:'1. Upload 32×32 ICO or PNG favicon\n2. Save', expected:'Browser tab icon updates to new favicon', priority:'Medium', type:'Positive' },
+      { id:'ST-008', name:'General settings — incorrect image type for logo rejected', pre:'General settings', steps:'1. Upload PDF as logo\n2. Save', expected:'Error: only image files accepted for logo', priority:'Medium', type:'Validation' },
+      { id:'ST-009', name:'General settings — save shows success toast', pre:'Changed a general setting', steps:'1. Click Save', expected:'Success toast: "Settings updated successfully"', priority:'High', type:'UI/UX' },
+      { id:'ST-010', name:'Org_admin cannot access global General settings', pre:'Logged in as org_admin', steps:'1. Navigate to Settings > General', expected:'Access denied or only org-level settings visible; no global platform settings', priority:'Critical', type:'Security' },
+
+      // ── Notifications ──────────────────────────────────────────────────────
+      { id:'ST-011', name:'Notifications settings page loads all notification types', pre:'Settings > Notifications', steps:'1. Open Notifications sub-section', expected:'List of notification events: New Enrollment, Course Completion, New User, Assignment Submitted, etc. with toggle per event', priority:'High', type:'Positive' },
+      { id:'ST-012', name:'Toggle email notification for "New Enrollment" event', pre:'Notifications settings', steps:'1. Enable toggle for "New Enrollment"\n2. Save', expected:'Admin receives email when a new learner enrolls in any course', priority:'High', type:'Positive' },
+      { id:'ST-013', name:'Disable email notification for "Course Completion"', pre:'Notification enabled', steps:'1. Disable toggle for "Course Completion"\n2. Save', expected:'No email sent to admin when learner completes a course', priority:'Medium', type:'Positive' },
+      { id:'ST-014', name:'Configure notification recipient email address', pre:'Notifications settings', steps:'1. Change notification recipient email\n2. Save\n3. Trigger a notification', expected:'Notification email sent to new recipient address', priority:'High', type:'Positive' },
+      { id:'ST-015', name:'Notification recipient — invalid email format rejected', pre:'Notifications settings', steps:'1. Enter "notvalid@"\n2. Save', expected:'Validation error: invalid email', priority:'High', type:'Validation' },
+      { id:'ST-016', name:'Multiple recipient emails (comma-separated) accepted', pre:'Notifications settings', steps:'1. Enter "admin@test.com, ops@test.com"\n2. Save', expected:'Both recipients receive notifications', priority:'Medium', type:'Positive' },
+
+      // ── Email Templates ────────────────────────────────────────────────────
+      { id:'ST-017', name:'Email Templates page lists all templates', pre:'Settings > Email Templates', steps:'1. Open Email Templates sub-section', expected:'Templates listed: Welcome, Invitation, Password Reset, Enrollment Confirmation, Course Completion, Certificate Issued, etc.', priority:'High', type:'Positive' },
+      { id:'ST-018', name:'Edit Welcome email template', pre:'Email Templates page', steps:'1. Click edit on "Welcome" template\n2. Modify subject line and body\n3. Save', expected:'Template saved; new users receive updated welcome email', priority:'High', type:'Positive' },
+      { id:'ST-019', name:'Email template subject cannot be blank', pre:'Edit template form', steps:'1. Clear subject line\n2. Save', expected:'Required field error on subject', priority:'High', type:'Validation' },
+      { id:'ST-020', name:'Email template body cannot be blank', pre:'Edit template form', steps:'1. Clear body\n2. Save', expected:'Required field error on body', priority:'High', type:'Validation' },
+      { id:'ST-021', name:'Email template uses valid merge variables/placeholders', pre:'Edit template; placeholders like {{user_name}} available', steps:'1. Insert {{user_name}} in body\n2. Save\n3. Trigger email\n4. Observe output', expected:'{{user_name}} replaced with actual learner name in sent email', priority:'High', type:'Positive' },
+      { id:'ST-022', name:'Invalid placeholder in template shows warning', pre:'Template editor', steps:'1. Enter {{nonexistent_variable}} in body\n2. Save', expected:'Warning: unrecognized placeholder; it will appear as-is in email', priority:'Medium', type:'Validation' },
+      { id:'ST-023', name:'Preview email template before saving', pre:'Template editor', steps:'1. Click "Preview" button', expected:'Preview modal shows rendered email with sample data replacing placeholders', priority:'Medium', type:'UI/UX' },
+      { id:'ST-024', name:'Reset email template to default', pre:'Customized template', steps:'1. Click "Reset to Default"\n2. Confirm', expected:'Template reverts to original system default', priority:'Medium', type:'Positive' },
+      { id:'ST-025', name:'XSS in email template body rejected or escaped', pre:'Template editor', steps:'1. Enter <script>alert(1)</script> in body\n2. Save', expected:'HTML sanitized; script not executed when email rendered', priority:'Critical', type:'Security' },
+
+      // ── Integrations ───────────────────────────────────────────────────────
+      { id:'ST-026', name:'Integrations page lists available integrations', pre:'Settings > Integrations', steps:'1. Open Integrations sub-section', expected:'Available integrations: Stripe (payments), Google Analytics, Zoom, SSO/SAML, Slack, Zapier, etc.', priority:'High', type:'Positive' },
+      { id:'ST-027', name:'Connect Stripe payment gateway', pre:'Integrations page', steps:'1. Click Connect on Stripe\n2. Enter Stripe publishable key and secret key\n3. Save', expected:'Stripe connected; test transaction possible; payment collection enabled', priority:'Critical', type:'Positive' },
+      { id:'ST-028', name:'Stripe secret key stored securely (not displayed)', pre:'Stripe connected', steps:'1. Re-open Stripe integration settings\n2. Check if secret key visible', expected:'Secret key masked (••••••); cannot be retrieved after save', priority:'Critical', type:'Security' },
+      { id:'ST-029', name:'Invalid Stripe key format rejected', pre:'Stripe integration form', steps:'1. Enter "not_a_stripe_key"\n2. Save', expected:'Error: invalid Stripe API key format', priority:'High', type:'Validation' },
+      { id:'ST-030', name:'Disconnect integration with confirmation', pre:'Integration connected', steps:'1. Click Disconnect on an integration\n2. Confirm', expected:'Integration disconnected; related functionality disabled', priority:'High', type:'Positive' },
+      { id:'ST-031', name:'SSO / SAML integration configuration', pre:'Integrations page', steps:'1. Click Configure on SSO\n2. Enter Entity ID, SSO URL, Certificate\n3. Save', expected:'SSO configured; users can log in via SAML IdP', priority:'High', type:'Positive' },
+      { id:'ST-032', name:'SSO with invalid certificate format rejected', pre:'SSO configuration form', steps:'1. Enter invalid certificate string\n2. Save', expected:'Error: invalid X.509 certificate format', priority:'High', type:'Validation' },
+
+      // ── API Keys ───────────────────────────────────────────────────────────
+      { id:'ST-033', name:'API Keys page shows existing keys with names', pre:'Settings > API', steps:'1. Open API Keys sub-section', expected:'List of API keys: name, created date, last used, prefix; full key NOT shown after creation', priority:'High', type:'Positive' },
+      { id:'ST-034', name:'Generate new API key', pre:'API Keys page', steps:'1. Click "Generate Key"\n2. Enter key name "CI/CD Integration"\n3. Confirm', expected:'New key displayed ONCE; copy shown; stored as hash; name saved', priority:'Critical', type:'Positive' },
+      { id:'ST-035', name:'API key shown only once after generation', pre:'API key just generated', steps:'1. Close the modal\n2. Re-open API Keys page\n3. Look for full key', expected:'Only key prefix visible (e.g., "sk_live_xxxx..."); full key not retrievable', priority:'Critical', type:'Security' },
+      { id:'ST-036', name:'Revoke API key with confirmation', pre:'API key exists', steps:'1. Click Revoke on API key\n2. Confirm', expected:'Key revoked; API calls with revoked key return 401', priority:'High', type:'Positive' },
+      { id:'ST-037', name:'Revoked API key returns 401 on use', pre:'Key revoked', steps:'1. Use revoked key in Authorization header\n2. Make API call', expected:'401 Unauthorized returned', priority:'Critical', type:'Security' },
+      { id:'ST-038', name:'API key name blank fails', pre:'Generate key form', steps:'1. Leave name blank\n2. Generate', expected:'Required field error on name', priority:'Medium', type:'Validation' },
+      { id:'ST-039', name:'Set API key permission scope (read-only vs read-write)', pre:'Generate key; scopes available', steps:'1. Select "Read Only" scope\n2. Generate key\n3. Try to POST with it', expected:'Read-only key rejects write operations with 403', priority:'High', type:'Positive' },
+
+      // ── Webhooks ───────────────────────────────────────────────────────────
+      { id:'ST-040', name:'Webhooks page shows configured webhook endpoints', pre:'Settings > Webhooks (or sub-section of integrations)', steps:'1. Open Webhooks section', expected:'List of endpoints with URL, events subscribed, status, last delivery', priority:'High', type:'Positive' },
+      { id:'ST-041', name:'Add webhook endpoint for "course.completed" event', pre:'Webhooks section', steps:'1. Click "Add Endpoint"\n2. Enter HTTPS URL\n3. Select event "course.completed"\n4. Save', expected:'Webhook registered; triggered when a learner completes a course', priority:'High', type:'Positive' },
+      { id:'ST-042', name:'Webhook endpoint must be HTTPS', pre:'Add webhook form', steps:'1. Enter "http://insecure.example.com/hook"\n2. Save', expected:'Error: webhook URL must use HTTPS', priority:'High', type:'Validation' },
+      { id:'ST-043', name:'Webhook endpoint invalid URL format rejected', pre:'Add webhook form', steps:'1. Enter "notaurl"\n2. Save', expected:'Validation error: invalid URL', priority:'High', type:'Validation' },
+      { id:'ST-044', name:'Test webhook delivery sends sample payload', pre:'Webhook configured', steps:'1. Click "Send Test" on webhook\n2. Observe response', expected:'Test payload sent; delivery log shows 200 response from endpoint', priority:'Medium', type:'Positive' },
+      { id:'ST-045', name:'Failed webhook delivery shows error in delivery log', pre:'Webhook endpoint returns 500', steps:'1. View webhook delivery log', expected:'Failed attempt logged with response code and timestamp', priority:'Medium', type:'Negative' },
+      { id:'ST-046', name:'SSRF via webhook URL blocked', pre:'Add webhook form', steps:'1. Enter "http://169.254.169.254/metadata" as URL\n2. Save or test', expected:'Internal IP address blocked; SSRF attempt rejected', priority:'Critical', type:'Security' },
+
+      // ── Security Settings ──────────────────────────────────────────────────
+      { id:'ST-047', name:'Security settings page loads', pre:'Settings > Security', steps:'1. Open Security sub-section', expected:'Options: Password Policy, 2FA Settings, Session Timeout, Allowed IP Ranges', priority:'High', type:'Positive' },
+      { id:'ST-048', name:'Set minimum password length to 12', pre:'Security > Password Policy', steps:'1. Set minimum length to 12\n2. Save', expected:'Users must use 12+ character passwords on reset/create', priority:'High', type:'Positive' },
+      { id:'ST-049', name:'Require uppercase letter in password policy', pre:'Security settings', steps:'1. Enable "Require Uppercase" toggle\n2. Save', expected:'Passwords without uppercase rejected at creation/reset', priority:'High', type:'Positive' },
+      { id:'ST-050', name:'Require special character in password policy', pre:'Security settings', steps:'1. Enable "Require Special Character"\n2. Save', expected:'Passwords without special chars rejected', priority:'High', type:'Positive' },
+      { id:'ST-051', name:'Set session timeout to 30 minutes', pre:'Security settings', steps:'1. Enter 30 in session timeout field\n2. Save', expected:'Users auto-logged out after 30 min of inactivity', priority:'High', type:'Positive' },
+      { id:'ST-052', name:'Session timeout 0 (never expire) is allowed or blocked based on policy', pre:'Security settings; timeout field', steps:'1. Enter 0\n2. Save', expected:'Either accepted (no timeout) or blocked with minimum requirement', priority:'Medium', type:'Boundary' },
+      { id:'ST-053', name:'Enable 2FA requirement for admin roles', pre:'Security settings', steps:'1. Toggle "Require 2FA for Admins" on\n2. Save', expected:'Admin-role users prompted to set up 2FA on next login', priority:'Critical', type:'Positive' },
+      { id:'ST-054', name:'IP allowlist — only allowed IPs can access admin panel', pre:'Security settings; IP allowlist enabled', steps:'1. Add specific IP to allowlist\n2. Attempt access from different IP', expected:'Access from non-allowlisted IP blocked with 403 or redirect', priority:'High', type:'Security' },
+      { id:'ST-055', name:'IP allowlist — invalid CIDR/IP format rejected', pre:'IP allowlist form', steps:'1. Enter "999.999.999.999"\n2. Save', expected:'Validation error: invalid IP address format', priority:'Medium', type:'Validation' },
+
+      // ── Branding ───────────────────────────────────────────────────────────
+      { id:'ST-056', name:'Branding settings — change primary color', pre:'Settings > Branding', steps:'1. Enter primary brand color hex #2A6FDB\n2. Save', expected:'UI accent colors update to new primary color', priority:'Medium', type:'Positive' },
+      { id:'ST-057', name:'Branding — invalid hex color rejected', pre:'Branding settings', steps:'1. Enter "notacolor" in hex field\n2. Save', expected:'Validation error: invalid hex color', priority:'Medium', type:'Validation' },
+      { id:'ST-058', name:'Branding — custom domain configuration', pre:'Branding settings; custom domain field', steps:'1. Enter custom domain "learn.mycompany.com"\n2. Follow DNS verification\n3. Save', expected:'Custom domain configured; platform accessible at that domain', priority:'High', type:'Positive' },
+      { id:'ST-059', name:'Branding — invalid domain format rejected', pre:'Branding; custom domain field', steps:'1. Enter "not a domain"\n2. Save', expected:'Validation error: invalid domain format', priority:'Medium', type:'Validation' },
+      { id:'ST-060', name:'Branding — remove custom domain restores default', pre:'Custom domain set', steps:'1. Clear domain field\n2. Save', expected:'Reverts to default platform URL', priority:'Medium', type:'Positive' },
+      { id:'ST-061', name:'White-label — hide Budgetnista branding', pre:'White-label plan; branding settings', steps:'1. Toggle "Hide Powered by Budgetnista"\n2. Save', expected:'"Powered by" attribution removed from learner-facing UI', priority:'Medium', type:'Positive' },
+      { id:'ST-062', name:'Branding changes reflected in learner portal', pre:'Brand color changed', steps:'1. Log in as learner\n2. View learner portal', expected:'New brand colors applied across learner-facing pages', priority:'Medium', type:'Positive' },
+      { id:'ST-063', name:'Settings changes audit logged', pre:'Any setting changed', steps:'1. Change a setting\n2. Save\n3. Check audit log', expected:'Audit entry: setting name, old value, new value, who changed it, timestamp', priority:'High', type:'Positive' },
+      { id:'ST-064', name:'Instructor cannot access any settings page', pre:'Logged in as instructor', steps:'1. Navigate to Settings', expected:'Settings hidden from sidebar; or 403 if URL accessed directly', priority:'Critical', type:'Security' },
+      { id:'ST-065', name:'Settings page CSRF protection', pre:'Valid admin session', steps:'1. Forge a cross-origin POST to settings API\n2. Without CSRF token', expected:'Request rejected; CSRF token validation fails; 403 returned', priority:'Critical', type:'Security' },
+    ]
+  }
+];
