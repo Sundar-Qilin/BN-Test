@@ -9,10 +9,28 @@ const fs = require('fs');
 
 // ── Load all test cases ──────────────────────────────────────────────────────
 const allSections = [
-  ...require('./tc-data-part1'),
-  ...require('./tc-data-part2'),
-  ...require('./tc-data-part3'),
+  ...require('./tc2-auth-dash'),
+  ...require('./tc3-orgs'),
+  ...require('./tc3-divs'),
+  ...require('./tc3-usrs'),
+  ...require('./tc3-invt'),
+  ...require('./tc2-courses-list-info'),
+  ...require('./tc2-courses-curriculum'),
+  ...require('./tc2-courses-learners-settings'),
+  ...require('./tc3-mlib'),
+  ...require('./tc3-mdla'),
+  ...require('./tc3-inst'),
+  ...require('./tc3-bndl'),
+  ...require('./tc3-path'),
+  ...require('./tc3-frms'),
+  ...require('./tc3-modr'),
+  ...require('./tc3-rwrd'),
+  ...require('./tc3-prod'),
+  ...require('./tc3-tran'),
+  ...require('./tc3-bill'),
   ...require('./tc-cohorts'),
+  ...require('./tc2-settings'),
+  ...require('./tc2-security'),
 ];
 
 // Build flat map: id → {id, name, pre, steps, expected, priority, type, section}
@@ -25,13 +43,17 @@ allSections.forEach(sec => {
 
 // ── Load Playwright JSON results ────────────────────────────────────────────
 let playwrightResults = null;
-const jsonPath = 'playwright-report/results.json';
+const jsonPath = 'playwright-report/results-raw.json';
 if (fs.existsSync(jsonPath)) {
   try {
     const raw = fs.readFileSync(jsonPath, 'utf8');
-    // The file may have console output prepended — find first '{'
-    const jsonStart = raw.indexOf('{');
-    playwrightResults = JSON.parse(jsonStart >= 0 ? raw.slice(jsonStart) : raw);
+    // Skip dotenvx/console header lines — find the first line that starts with '{'
+    const lines = raw.split('\n');
+    let jsonStart = 0;
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].trim().startsWith('{')) { jsonStart = i; break; }
+    }
+    playwrightResults = JSON.parse(lines.slice(jsonStart).join('\n'));
   } catch (e) {
     console.warn('Could not parse results.json:', e.message);
   }
@@ -89,8 +111,11 @@ if (playwrightResults) {
 }
 
 // ── Stats ────────────────────────────────────────────────────────────────────
-const totalTCs = Object.keys(tcMap).length;
-const totalManual = totalTCs - Object.keys(automatedResults).filter(k => !k.startsWith('__')).length;
+// Count all cases including those with duplicate IDs across sections
+const totalTCs = allSections.reduce((s, sec) => s + sec.cases.length, 0);
+// Count how many TCs (including dups) have automated coverage
+const automatedCoverageCount = allSections.reduce((s, sec) => s + sec.cases.filter(tc => automatedResults[tc.id]).length, 0);
+const totalManual = totalTCs - automatedCoverageCount;
 
 // Section-level stats
 const sectionStats = {};
@@ -214,7 +239,7 @@ const sectionRows = allSections.map(sec =>
   sectionRow(sec) + sec.cases.map(tc => tcRow(tc, sec)).join('')
 ).join('');
 
-const donutSvg = donut(totalPass, totalFail, totalFlaky, totalTCs - totalAutomated, totalTCs);
+const donutSvg = donut(totalPass, totalFail, totalFlaky, totalTCs - automatedCoverageCount, totalTCs);
 
 const html = `<!doctype html>
 <html lang="en">
@@ -265,7 +290,7 @@ const html = `<!doctype html>
   <div class="kpi green"><div class="val">${totalPass}</div><div class="lbl">Automated Pass${totalFlaky ? ' (incl. ' + totalFlaky + ' flaky)' : ''}</div></div>
   <div class="kpi red"><div class="val">${totalFail}</div><div class="lbl">Automated Fail</div></div>
   <div class="kpi amber"><div class="val">${totalAutomated}</div><div class="lbl">Automated Total</div></div>
-  <div class="kpi purple"><div class="val">${totalTCs - totalAutomated}</div><div class="lbl">Manual / Not Automated</div></div>
+  <div class="kpi purple"><div class="val">${totalTCs - automatedCoverageCount}</div><div class="lbl">Manual / Not Automated</div></div>
 </div>
 
 <div class="chart-row">
@@ -273,11 +298,11 @@ const html = `<!doctype html>
   <div class="legend">
     <div class="legend-item"><div class="dot" style="background:#16a34a"></div><strong>${totalPass}</strong>&nbsp;pass${totalFlaky ? ' (incl. ' + totalFlaky + ' flaky)' : ''}</div>
     <div class="legend-item"><div class="dot" style="background:#dc2626"></div><strong>${totalFail}</strong>&nbsp;fail</div>
-    <div class="legend-item"><div class="dot" style="background:#ddd6fe"></div><strong>${totalTCs - totalAutomated}</strong>&nbsp;manual / not automated</div>
+    <div class="legend-item"><div class="dot" style="background:#ddd6fe"></div><strong>${totalTCs - automatedCoverageCount}</strong>&nbsp;manual / not automated</div>
     <div class="legend-item"><div class="dot" style="background:#9ca3af"></div><strong>${allSections.length}</strong>&nbsp;sections</div>
   </div>
   <div style="margin-left:auto;background:#fff;border-radius:12px;padding:14px 20px;box-shadow:0 1px 4px rgba(0,0,0,.08);font-size:13px;line-height:2">
-    <div><strong>Automation coverage:</strong> ${pct(totalAutomated, totalTCs)}% (${totalAutomated}/${totalTCs})</div>
+    <div><strong>Automation coverage:</strong> ${pct(automatedCoverageCount, totalTCs)}% (${automatedCoverageCount}/${totalTCs})</div>
     <div><strong>Automated pass rate:</strong> ${totalAutomated > 0 ? pct(totalPass, totalAutomated) : 0}% (${totalPass}/${totalAutomated})</div>
     <div><strong>Spec files run:</strong> 19 production specs</div>
     <div><strong>Sections covered:</strong> ${allSections.length}</div>
@@ -406,6 +431,6 @@ console.log(`  Automated   : ${totalAutomated} (${pct(totalAutomated, totalTCs)}
 console.log(`  Pass        : ${totalPass}`);
 console.log(`  Fail        : ${totalFail}`);
 console.log(`  Flaky       : ${totalFlaky}`);
-console.log(`  Manual      : ${totalTCs - totalAutomated}`);
+console.log(`  Manual      : ${totalTCs - automatedCoverageCount}`);
 if (totalAutomated > 0)
   console.log(`  Pass rate   : ${pct(totalPass, totalAutomated)}%`);
