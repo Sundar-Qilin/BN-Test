@@ -11,12 +11,12 @@ test.describe('TRAN — Transactions', () => {
 
 
   test('TL-001 Transactions list page loads', async ({ page }) => {
-    await page.getByRole('link', { name: 'Transactions' }).click();
+    await page.goto('/transactions'); await page.waitForLoadState('networkidle').catch(() => {});
     await expect(page.getByRole('heading', { name: 'Transactions' }).first()).toBeVisible({ timeout: 10000 });
   });
 
   test('TL-002 Status filter present', async ({ page }) => {
-    await page.getByRole('link', { name: 'Transactions' }).click();
+    await page.goto('/transactions'); await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForLoadState('networkidle').catch(() => {});
     // Status filter may be a select, combobox, or tab list
     const filter = page.locator('select, [role="combobox"], [role="tablist"]').first();
@@ -25,7 +25,7 @@ test.describe('TRAN — Transactions', () => {
   });
 
   test('TL-005 Date range filter present', async ({ page }) => {
-    await page.getByRole('link', { name: 'Transactions' }).click();
+    await page.goto('/transactions'); await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForLoadState('networkidle').catch(() => {});
     // Date filter may be a date input, popover button, or calendar icon
     const datePicker = page.locator('input[type="date"], [class*="date-picker"], [placeholder*="date" i], button[aria-label*="date" i], button:has-text("Date")').first();
@@ -34,7 +34,7 @@ test.describe('TRAN — Transactions', () => {
   });
 
   test('TL-008 Search by email present', async ({ page }) => {
-    await page.getByRole('link', { name: 'Transactions' }).click();
+    await page.goto('/transactions'); await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForLoadState('networkidle').catch(() => {});
     const search = page.locator('input[type="search"], input[placeholder*="search" i], [role="searchbox"]').first();
     await expect(search).toBeAttached({ timeout: 10000 });

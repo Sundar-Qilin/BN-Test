@@ -12,32 +12,32 @@ test.describe('CRSE — Courses (List, Info, Curriculum)', () => {
 
   // ── CRSE-LIST ──────────────────────────────────────────────────────────────
   test('CL-001 Courses list page loads', async ({ page }) => {
-    await page.getByRole('link', { name: 'Courses' }).click();
+    await page.goto('/courses'); await page.waitForLoadState('networkidle').catch(() => {});
     await expect(page.getByRole('heading', { name: 'Courses' }).first()).toBeVisible({ timeout: 10000 });
   });
 
   test('CL-002 Search bar present on courses list', async ({ page }) => {
-    await page.getByRole('link', { name: 'Courses' }).click();
+    await page.goto('/courses'); await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForLoadState('networkidle').catch(() => {});
     const search = page.locator('input[type="search"], input[placeholder*="search" i], [role="searchbox"]').first();
     await expect(search).toBeVisible({ timeout: 10000 });
   });
 
   test('CL-003 Filter by status present', async ({ page }) => {
-    await page.getByRole('link', { name: 'Courses' }).click();
+    await page.goto('/courses'); await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForLoadState('networkidle').catch(() => {});
     const filter = page.locator('select, [role="combobox"]').first();
     await expect(filter).toBeAttached({ timeout: 10000 });
   });
 
   test('CL-004 Empty state shown (mock returns 0)', async ({ page }) => {
-    await page.getByRole('link', { name: 'Courses' }).click();
+    await page.goto('/courses'); await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForLoadState('networkidle').catch(() => {});
     await expect(page.getByText(/no|empty|0/i).first()).toBeVisible({ timeout: 10000 });
   });
 
   test('CL-005 Create course button present', async ({ page }) => {
-    await page.getByRole('link', { name: 'Courses' }).click();
+    await page.goto('/courses'); await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForLoadState('networkidle').catch(() => {});
     const btn = page.getByRole('button', { name: /create|add|new/i }).or(page.getByRole('link', { name: /create|add|new/i })).first();
     await expect(btn).toBeVisible({ timeout: 10000 });

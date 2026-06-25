@@ -1,0 +1,321 @@
+{
+  "adminLoggedIn": true,
+  "adminSidebar": [],
+  "adminCohortNavItems": [],
+  "adminSidebarGroupLabels": [],
+  "adminCohortsURL": "https://admin.dev.budgetnista-admin.qilinlab.com/login?next=%2Fcohorts",
+  "adminCohortDetailURL": "https://admin.dev.budgetnista-admin.qilinlab.com/login?next=%2Fcohorts%2F10",
+  "adminFlagsURL": "https://admin.dev.budgetnista-admin.qilinlab.com/login?tab=flags&next=%2Fcohorts",
+  "adminFlagsColumns": [],
+  "adminFlagsRowCount": 0,
+  "adminFlagsEmptyState": [],
+  "adminFlagsPageText": [
+    "Admin consoleManage institutions, courses, learners, and support — one signed-in surface.Welcome backSign in to the Budgetnista admin console.EmailPasswordForgot Password?Sign inProtected admin access only.Protected by reCAPTCHA — Privacy & TermsBudgetnista Admin · v0.1"
+  ],
+  "adminFlagsButtons": [
+    "",
+    "",
+    "Sign in"
+  ],
+  "adminFlagsDropdowns": [],
+  "adminCoursesListURL": "https://admin.dev.budgetnista-admin.qilinlab.com/login?next=%2Fcourses",
+  "adminAPIResults": {
+    "/api/v1/admin/cohorts/": {
+      "status": 200,
+      "count": 0,
+      "fields": [],
+      "sampleItem": null
+    },
+    "/api/v1/admin/cohort-flags/": {
+      "status": 200,
+      "count": 0,
+      "fields": [],
+      "sampleItem": null
+    },
+    "/api/v1/admin/courses/?cohorts_enabled=true": {
+      "status": 200,
+      "count": 0,
+      "fields": [],
+      "sampleItem": null
+    },
+    "/api/v1/admin/cohorts/?status=active": {
+      "status": 200,
+      "count": 0,
+      "fields": [],
+      "sampleItem": null
+    },
+    "/api/v1/admin/cohorts/?status=upcoming": {
+      "status": 200,
+      "count": 0,
+      "fields": [],
+      "sampleItem": null
+    },
+    "/api/v1/admin/cohort-flags/?status=open": {
+      "status": 200,
+      "count": 0,
+      "fields": [],
+      "sampleItem": null
+    },
+    "/api/v1/admin/courses/": {
+      "status": 200,
+      "count": 0,
+      "fields": [],
+      "sampleItem": null
+    }
+  },
+  "learnerLoggedIn": true,
+  "learnerDashboardURL": "https://learner.dev.budgetnista.qilinlab.com/verify-email?email=sundar%40qilinlab.com",
+  "learnerDashboardH1": [
+    "Verify your email"
+  ],
+  "learnerNavLinks": [],
+  "learnerCohortNavLinks": [],
+  "learnerCommunityURL": "https://learner.dev.budgetnista.qilinlab.com/verify-email",
+  "learnerCommunityH1": [
+    "Verify your email"
+  ],
+  "learnerCommunityH2": [
+    "Almost there"
+  ],
+  "learnerCommunityTabs": [],
+  "learnerCommunityMainText": [
+    "Almost thereOne quick step — confirm your email and your account is ready to go.Verify your emailEnter the 6-digit code we just sent you. It expires in 10 minutes.Verification codeVerify emailDidn't receive the code?Resend codeWrong account? Sign in differentlyBudgetnista · v0.1"
+  ],
+  "learnerCohortRoutes": {
+    "/community/cohorts": {
+      "actualURL": "https://learner.dev.budgetnista.qilinlab.com/verify-email",
+      "headings": [
+        "Almost there",
+        "Verify your email"
+      ],
+      "is404": false,
+      "isLoginRedirect": false,
+      "isRedirected": true,
+      "hasOwnPage": true,
+      "contentLines": [
+        "Almost thereOne quick step — confirm your email and your account is ready to go.Verify your emailEnter the 6-digit code we just sent you. It expires in 10 minutes.Verification codeVerify emailDidn't receive the code?Resend codeWrong account? Sign in differentlyBudgetnista · v0.1"
+      ]
+    },
+    "/community/cohorts/1": {
+      "actualURL": "https://learner.dev.budgetnista.qilinlab.com/verify-email",
+      "headings": [
+        "Almost there",
+        "Verify your email"
+      ],
+      "is404": false,
+      "isLoginRedirect": false,
+      "isRedirected": true,
+      "hasOwnPage": true,
+      "contentLines": [
+        "Almost thereOne quick step — confirm your email and your account is ready to go.Verify your emailEnter the 6-digit code we just sent you. It expires in 10 minutes.Verification codeVerify emailDidn't receive the code?Resend codeWrong account? Sign in differentlyBudgetnista · v0.1"
+      ]
+    },
+    "/community/cohorts/2": {
+      "actualURL": "https://learner.dev.budgetnista.qilinlab.com/verify-email",
+      "headings": [
+        "Almost there",
+        "Verify your email"
+      ],
+      "is404": false,
+      "isLoginRedirect": false,
+      "isRedirected": true,
+      "hasOwnPage": true,
+      "contentLines": [
+        "Almost thereOne quick step — confirm your email and your account is ready to go.Verify your emailEnter the 6-digit code we just sent you. It expires in 10 minutes.Verification codeVerify emailDidn't receive the code?Resend codeWrong account? Sign in differentlyBudgetnista · v0.1"
+      ]
+    },
+    "/community/cohorts/3": {
+      "actualURL": "https://learner.dev.budgetnista.qilinlab.com/verify-email",
+      "headings": [
+        "Almost there",
+        "Verify your email"
+      ],
+      "is404": false,
+      "isLoginRedirect": false,
+      "isRedirected": true,
+      "hasOwnPage": true,
+      "contentLines": [
+        "Almost thereOne quick step — confirm your email and your account is ready to go.Verify your emailEnter the 6-digit code we just sent you. It expires in 10 minutes.Verification codeVerify emailDidn't receive the code?Resend codeWrong account? Sign in differentlyBudgetnista · v0.1"
+      ]
+    },
+    "/community/groups": {
+      "actualURL": "https://learner.dev.budgetnista.qilinlab.com/verify-email",
+      "headings": [
+        "Almost there",
+        "Verify your email"
+      ],
+      "is404": false,
+      "isLoginRedirect": false,
+      "isRedirected": true,
+      "hasOwnPage": true,
+      "contentLines": [
+        "Almost thereOne quick step — confirm your email and your account is ready to go.Verify your emailEnter the 6-digit code we just sent you. It expires in 10 minutes.Verification codeVerify emailDidn't receive the code?Resend codeWrong account? Sign in differentlyBudgetnista · v0.1"
+      ]
+    },
+    "/community/groups/1": {
+      "actualURL": "https://learner.dev.budgetnista.qilinlab.com/verify-email",
+      "headings": [
+        "Almost there",
+        "Verify your email"
+      ],
+      "is404": false,
+      "isLoginRedirect": false,
+      "isRedirected": true,
+      "hasOwnPage": true,
+      "contentLines": [
+        "Almost thereOne quick step — confirm your email and your account is ready to go.Verify your emailEnter the 6-digit code we just sent you. It expires in 10 minutes.Verification codeVerify emailDidn't receive the code?Resend codeWrong account? Sign in differentlyBudgetnista · v0.1"
+      ]
+    },
+    "/cohorts": {
+      "actualURL": "https://learner.dev.budgetnista.qilinlab.com/cohorts",
+      "headings": [
+        "This address isn't available"
+      ],
+      "is404": false,
+      "isLoginRedirect": false,
+      "isRedirected": false,
+      "hasOwnPage": true,
+      "contentLines": [
+        "Unknown workspaceThis address isn't availableThe web address you entered doesn't match a Budgetnista workspace. Check the link for typos, or head to Budgetnista to sign in.Go to Budgetnista"
+      ]
+    },
+    "/cohorts/1": {
+      "actualURL": "https://learner.dev.budgetnista.qilinlab.com/cohorts/1",
+      "headings": [
+        "This address isn't available"
+      ],
+      "is404": false,
+      "isLoginRedirect": false,
+      "isRedirected": false,
+      "hasOwnPage": true,
+      "contentLines": [
+        "Unknown workspaceThis address isn't availableThe web address you entered doesn't match a Budgetnista workspace. Check the link for typos, or head to Budgetnista to sign in.Go to Budgetnista"
+      ]
+    },
+    "/groups": {
+      "actualURL": "https://learner.dev.budgetnista.qilinlab.com/groups",
+      "headings": [
+        "This address isn't available"
+      ],
+      "is404": false,
+      "isLoginRedirect": false,
+      "isRedirected": false,
+      "hasOwnPage": true,
+      "contentLines": [
+        "Unknown workspaceThis address isn't availableThe web address you entered doesn't match a Budgetnista workspace. Check the link for typos, or head to Budgetnista to sign in.Go to Budgetnista"
+      ]
+    },
+    "/my-cohorts": {
+      "actualURL": "https://learner.dev.budgetnista.qilinlab.com/my-cohorts",
+      "headings": [
+        "This address isn't available"
+      ],
+      "is404": false,
+      "isLoginRedirect": false,
+      "isRedirected": false,
+      "hasOwnPage": true,
+      "contentLines": [
+        "Unknown workspaceThis address isn't availableThe web address you entered doesn't match a Budgetnista workspace. Check the link for typos, or head to Budgetnista to sign in.Go to Budgetnista"
+      ]
+    },
+    "/my-groups": {
+      "actualURL": "https://learner.dev.budgetnista.qilinlab.com/my-groups",
+      "headings": [
+        "This address isn't available"
+      ],
+      "is404": false,
+      "isLoginRedirect": false,
+      "isRedirected": false,
+      "hasOwnPage": true,
+      "contentLines": [
+        "Unknown workspaceThis address isn't availableThe web address you entered doesn't match a Budgetnista workspace. Check the link for typos, or head to Budgetnista to sign in.Go to Budgetnista"
+      ]
+    }
+  },
+  "learnerMyCoursesURL": "https://learner.dev.budgetnista.qilinlab.com/verify-email",
+  "learnerMyCoursesH1": [
+    "Verify your email"
+  ],
+  "learnerMyCoursesCardCount": 0,
+  "learnerMyCoursesCohortChips": [],
+  "learnerMyCoursesCohortText": [],
+  "learnerLessonPlayerTabs": [],
+  "learnerLessonHasCohortTab": false,
+  "learnerNotificationBell": false,
+  "learnerProfileURL": "https://learner.dev.budgetnista.qilinlab.com/verify-email",
+  "learnerNotificationsPageURL": "https://learner.dev.budgetnista.qilinlab.com/notifications",
+  "apiCallLog": [
+    {
+      "portal": "admin",
+      "status": 200,
+      "url": "/api/v1/admin/auth/login/",
+      "method": "POST"
+    },
+    {
+      "portal": "admin",
+      "status": 200,
+      "url": "/api/v1/admin/auth/profile/",
+      "method": "GET"
+    },
+    {
+      "portal": "admin",
+      "status": 200,
+      "url": "/api/v1/auth/tenant-redirect/",
+      "method": "GET"
+    },
+    {
+      "portal": "admin",
+      "status": 200,
+      "url": "/api/v1/notifications/unread-count/",
+      "method": "GET"
+    },
+    {
+      "portal": "admin",
+      "status": 200,
+      "url": "/api/v1/admin/cohorts/",
+      "method": "GET"
+    },
+    {
+      "portal": "admin",
+      "status": 200,
+      "url": "/api/v1/admin/cohort-flags/",
+      "method": "GET"
+    },
+    {
+      "portal": "admin",
+      "status": 200,
+      "url": "/api/v1/admin/courses/",
+      "method": "GET"
+    },
+    {
+      "portal": "admin",
+      "status": 200,
+      "url": "/api/v1/admin/cohorts/",
+      "method": "GET"
+    },
+    {
+      "portal": "admin",
+      "status": 200,
+      "url": "/api/v1/admin/cohorts/",
+      "method": "GET"
+    },
+    {
+      "portal": "admin",
+      "status": 200,
+      "url": "/api/v1/admin/cohort-flags/",
+      "method": "GET"
+    },
+    {
+      "portal": "admin",
+      "status": 200,
+      "url": "/api/v1/admin/courses/",
+      "method": "GET"
+    },
+    {
+      "portal": "learner",
+      "status": 200,
+      "url": "/api/v1/auth/login/",
+      "method": "POST"
+    }
+  ]
+}

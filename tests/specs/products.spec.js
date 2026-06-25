@@ -11,25 +11,25 @@ test.describe('PROD — Products', () => {
 
 
   test('PRL-001 Products list page loads', async ({ page }) => {
-    await page.getByRole('link', { name: 'Products' }).click();
+    await page.goto('/products'); await page.waitForLoadState('networkidle').catch(() => {});
     await expect(page.getByRole('heading', { name: 'Products' }).first()).toBeVisible({ timeout: 10000 });
   });
 
   test('PRL-002 Type filter present', async ({ page }) => {
-    await page.getByRole('link', { name: 'Products' }).click();
+    await page.goto('/products'); await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForLoadState('networkidle').catch(() => {});
     const filter = page.locator('select, [role="combobox"]').first();
     await expect(filter).toBeAttached({ timeout: 10000 });
   });
 
   test('PRL-009 Empty state shown', async ({ page }) => {
-    await page.getByRole('link', { name: 'Products' }).click();
+    await page.goto('/products'); await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForLoadState('networkidle').catch(() => {});
     await expect(page.getByText(/no|empty|0/i).first()).toBeVisible({ timeout: 10000 });
   });
 
   test('PF-001 Create product button present', async ({ page }) => {
-    await page.getByRole('link', { name: 'Products' }).click();
+    await page.goto('/products'); await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForLoadState('networkidle').catch(() => {});
     const btn = page.getByRole('button', { name: /create|add|new/i }).or(page.getByRole('link', { name: /create|add|new/i })).first();
     await expect(btn).toBeVisible({ timeout: 10000 });

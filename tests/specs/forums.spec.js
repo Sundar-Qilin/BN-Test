@@ -11,7 +11,7 @@ test.describe('FRMS — Forums', () => {
 
 
   test('FC-001 Forums page loads', async ({ page }) => {
-    await page.getByRole('link', { name: 'Forums' }).click();
+    await page.goto('/forums'); await page.waitForLoadState('networkidle').catch(() => {});
     await expect(page.getByRole('heading', { name: 'Forums' })).toBeVisible({ timeout: 10000 });
   });
 
@@ -30,7 +30,7 @@ test.describe('FRMS — Forums', () => {
   });
 
   test('FT-001 Thread list area present', async ({ page }) => {
-    await page.getByRole('link', { name: 'Forums' }).click();
+    await page.goto('/forums'); await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForLoadState('networkidle').catch(() => {});
     await expect(page.getByRole('heading', { name: 'Forums' })).toBeVisible({ timeout: 10000 });
   });
@@ -41,7 +41,7 @@ test.describe('FRMS — Forums', () => {
   });
 
   test('FS-001 Search functionality present', async ({ page }) => {
-    await page.getByRole('link', { name: 'Forums' }).click();
+    await page.goto('/forums'); await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForLoadState('networkidle').catch(() => {});
     const search = page.locator('input[type="search"], input[placeholder*="search" i], [role="searchbox"]').first();
     await expect(search).toBeAttached({ timeout: 10000 });

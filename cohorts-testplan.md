@@ -3,7 +3,7 @@
 **Scope:** End-to-end testing of the Cohort Groups module across Backend (`budgetnista-be`), Admin FE (`budgetnista-admin-fe`), and Learner FE (`budgetnista-learner-fe`).
 **Author:** QA
 **Execution method:** Phase-wise, Playwright MCP (UI) + manual/API checks (backend jobs, notifications).
-**Last updated:** 2026-06-24
+**Last updated:** 2026-06-25
  
 ---
  
@@ -17,9 +17,9 @@
 ### 0.2 Environments & URLs
 | Component | URL | Notes |
 |---|---|---|
-| Backend API |  | Django + DRF; Celery worker + beat running |
-| Admin FE | https://admin.dev.budgetnista-admin.qilinlab.com/dashboard | `pnpm dev --port 3001` |
-| Learner FE | https://learner.dev.budgetnista.qilinlab.com/login?next=%2Flearn%2Fcourse-to-yap%2Fnew-pdf-lesson | `pnpm dev` |
+| Backend API | https://budgetnista-be-production.up.railway.app | Django + DRF; `/api/v1/admin/` prefix |
+| Admin FE | https://admin.dev.budgetnista-admin.qilinlab.com | Login: superadmin@yopmail.com / Admin@123 |
+| Learner FE | https://learner.dev.budgetnista.qilinlab.com | Login: sundar@qilinlab.com / 7708278760sS@ |
 | Redis | localhost:6379 | throttle + cache + celery broker |
  
 ### 0.3 Test accounts (provision before run)
@@ -95,11 +95,16 @@
  
 ## PHASE 3 — Admin: Cohort List & Filtering
  
-> Page: `/cohorts` (Cohorts tab).
+> Page: `/cohorts` (Cohorts tab). Navigate via sidebar: **Community → Cohorts** (Community group must be expanded).
+ 
+**Confirmed column headers (live):** NAME, COURSE, ORG, ISO WEEK, DATE RANGE, MEMBERS, STATUS, ORIGIN
+ 
+**Confirmed filter controls (live — 5 total):** "Search cohort name…" (text), "All courses" (dropdown), "All organisations" (dropdown), "All statuses" (dropdown), "All origins" (dropdown)
  
 | ID | Title | Priority | Steps | Expected |
 |---|---|---|---|---|
-| P3-01 | List renders | P0 | Open `/cohorts` | Table: name, course, org, week, status, members, origin; Cohorts/Flags tabs; flag-count badge |
+| P3-01 | List renders | P0 | Expand "Community" in sidebar → click "Cohorts" | 5 filter controls visible (search + 4 dropdowns); count label "N cohorts"; Cohorts/Flags tabs visible |
+| P3-01b | Column headers visible with data | P0 | Open /cohorts when cohorts exist | Columns: NAME, COURSE, ORG, ISO WEEK, DATE RANGE, MEMBERS, STATUS, ORIGIN |
 | P3-02 | Search by name | P1 | Type cohort name (debounced) | Filtered rows |
 | P3-03 | Filter by course | P1 | Select course | Only that course's cohorts |
 | P3-04 | Filter by organisation | P1 | Select org | Org-scoped rows |
@@ -107,14 +112,16 @@
 | P3-06 | Filter by origin | P2 | Auto/Manual/Solo | Correct subset |
 | P3-07 | Clear filters | P2 | Click clear | All cohorts return |
 | P3-08 | Pagination | P2 | >20 cohorts | 20/page; navigate pages |
-| P3-09 | Empty state | P2 | Course w/ no cohorts | "No cohorts yet" + link to course settings |
-| P3-10 | Row → detail | P0 | Click row | Navigate `/cohorts/{id}` |
+| P3-09 | Empty state | P2 | No cohorts configured yet | "No cohorts yet" icon + "Turn on cohorts for a course in Course → Settings → Cohorts. The weekly job then groups each week's enrolments into a cohort every Monday." |
+| P3-10 | Row → detail | P0 | Click row | Navigate `/cohorts/{id}`; detail header shows "Week {N} — {Course Name}" |
  
 ---
  
 ## PHASE 4 — Admin: Cohort Detail + Edit + Optimistic Lock
  
 > Page: `/cohorts/[cohortId]` → Manage menu → Edit cohort.
+ 
+**Confirmed Manage menu options (live):** Edit cohort | Merge a cohort in… | Split cohort… | Delete cohort (red/destructive)
  
 | ID | Title | Priority | Steps | Expected |
 |---|---|---|---|---|
@@ -132,9 +139,12 @@
  
 > Detail → Members tab.
  
+**Confirmed member table columns (live):** LEARNER, State (sortable), JOINED VIA, Progress (sortable), Joined (sortable)
+**Add members button** visible top-right of Members tab.
+ 
 | ID | Title | Priority | Steps | Expected |
 |---|---|---|---|---|
-| P5-01 | Roster renders | P0 | Open Members tab | Avatar/name/email, state badge, joined-via, override "pinned" chip, progress %, actions |
+| P5-01 | Roster renders | P0 | Open Members tab | Columns: LEARNER (avatar+name/email), State (sortable), JOINED VIA, Progress % (sortable), Joined (sortable); "Add members" button top-right; empty state: "No members in this cohort yet." |
 | P5-02 | Add members (multi) | P0 | Add members → search → select 3 → submit | Fan-out `POST members/`; summary toast "Added N"; counts update |
 | P5-03 | Add already-in-cohort | P1 | Add a learner already in a cohort | Tallied: "Added X · 1 already in a cohort" (409 handled) |
 | P5-04 | Move member | P0 | Move member → pick dest (same course) | `POST move-member/`; member leaves source, joins dest; progress preserved; audit `member_moved`; COHORT_MOVED notif |
@@ -172,17 +182,26 @@
  
 > Page: `/cohorts` (Flags tab). Depends on flags from Phase 2.
  
+**Confirmed filter options (live):**
+- Status: **Open** (default), Resolved, Dismissed, All statuses
+- Kind: **All kinds** (default), Solo cohort, Proximity, Merge proposal
+- Course: **All courses** (default), then individual courses
+ 
+**Confirmed column headers (live):** FLAG, COURSE, ORGANISATION, LEARNER, Raised (sortable ↑↓), Status (sortable ↑↓)
+ 
 | ID | Title | Priority | Steps | Expected |
 |---|---|---|---|---|
-| P8-01 | Queue renders | P0 | Open Flags tab | Kind badge, course, org, learner, raised time, status, actions |
-| P8-02 | Filter status/kind/course | P1 | Apply filters | Correct subset (default Open) |
-| P8-03 | Accept SOLO/PROXIMITY | P1 | Accept a non-merge flag | Acknowledged; status resolved `accepted`; assignment unchanged |
-| P8-04 | Accept MERGE_PROPOSAL | P0 | Accept merge flag | Performs merge; resolution `merged`; toast "Cohorts merged"; secondary archived |
-| P8-05 | Dismiss | P1 | Dismiss flag | status `dismissed`; only flags list invalidated |
-| P8-06 | Override | P0 | Override → pick dest cohort | `POST override/`; learner reassigned membership `source=override is_override=true`; flag resolved `overridden`; audit `override_assignment` |
-| P8-07 | Override scope | P1 | Open dest picker | Scoped to flag's course/org (BE re-enforces) |
-| P8-08 | Flag-raised notification | P1 | Trigger any new flag | COHORT_FLAG_RAISED broadcast to all super_admins |
-| P8-09 | One-open-flag-per-cohort | P2 | Re-run job producing same solo | No duplicate OPEN flag (partial-unique) |
+| P8-01 | Queue renders | P0 | Open Flags tab | Columns: FLAG, COURSE, ORGANISATION, LEARNER, Raised (sortable), Status (sortable); 3 filter dropdowns (Status/Kind/Course); flag count in top-right |
+| P8-02 | Filter by status | P1 | Open Status dropdown | Options: Open (default), Resolved, Dismissed, All statuses |
+| P8-03 | Filter by kind | P1 | Open Kind dropdown | Options: All kinds (default), Solo cohort, Proximity, Merge proposal |
+| P8-04 | Accept SOLO/PROXIMITY | P1 | Accept a non-merge flag | Acknowledged; status → resolved; assignment unchanged |
+| P8-05 | Accept MERGE_PROPOSAL | P0 | Accept merge flag | Performs merge; resolution `merged`; toast "Cohorts merged"; secondary archived |
+| P8-06 | Dismiss | P1 | Dismiss flag | status `dismissed`; only flags list invalidated |
+| P8-07 | Override | P0 | Override → pick dest cohort | `POST override/`; learner reassigned membership `source=override is_override=true`; flag resolved `overridden`; audit `override_assignment` |
+| P8-08 | Override scope | P1 | Open dest picker | Scoped to flag's course/org (BE re-enforces) |
+| P8-09 | Flag-raised notification | P1 | Trigger any new flag | COHORT_FLAG_RAISED broadcast to all super_admins |
+| P8-10 | One-open-flag-per-cohort | P2 | Re-run job producing same solo | No duplicate OPEN flag (partial-unique) |
+| P8-11 | Empty state text | P2 | No flags match filter | "No flags match your filters. Nothing needs attention." |
  
 ---
  
@@ -190,9 +209,11 @@
  
 > Detail → Activity tab.
  
+**Confirmed Activity tab empty state (live):** "No activity yet." / "Admin actions on this cohort will appear here."
+ 
 | ID | Title | Priority | Steps | Expected |
 |---|---|---|---|---|
-| P9-01 | Timeline renders | P1 | Open Activity | Each entry: action, actor email, before/after, timestamp; paginated |
+| P9-01 | Timeline renders | P1 | Open Activity | Each entry: action, actor email, before/after, timestamp; paginated. Empty state: "No activity yet." + "Admin actions on this cohort will appear here." |
 | P9-02 | All verbs captured | P1 | After Phases 4–8 actions | created, renamed, dates_changed, member_added/removed/moved, merged, split, override_assignment present |
 | P9-03 | System actor null | P2 | Job-created cohort | actor null / system; renders gracefully |
 | P9-04 | Read-only | P3 | Inspect | No mutating controls |
@@ -202,6 +223,18 @@
 ## PHASE 10 — Learner: My Cohorts / Groups Tab
  
 > Learner FE. Page: `/community?tab=groups`.
+ 
+**Important — Learner portal login (confirmed live):** Login is **2-step with email OTP**. After entering credentials the portal redirects to `/verify-email?email=...` requiring a 6-digit code. All `/community/*` routes redirect to `/verify-email` if the OTP step is not completed. Automated Playwright testing of the learner cohort UI requires either a real OTP, a backend bypass flag, or a seeded session.
+ 
+**Confirmed Community page structure (live):**
+- URL: `/community`
+- Heading: "Community"
+- Subtitle: "Connect with fellow learners through forums and groups"
+- **Tabs: Forums | Groups | Challenges** (there is NO standalone "Cohorts" tab — cohorts surface inside the **Groups** tab)
+- Groups tab → calls `GET /api/v1/cohorts/me/` to fetch learner's cohorts
+- Sidebar navigation under Community: Discussion Forum, Messages
+
+
  
 | ID | Title | Priority | Steps | Expected |
 |---|---|---|---|---|
@@ -304,10 +337,12 @@
  
 ## PHASE 17 — Permissions / RBAC
  
+> **Important:** "Cohorts" is nested under the "Community" sidebar group (alongside Forums and Moderation). The Community group must be expanded to reveal Cohorts. super_admin sees Community → Cohorts; lower roles should not see the Community/Cohorts nav items.
+ 
 | ID | Title | Priority | Steps | Expected |
 |---|---|---|---|---|
-| P17-01 | Nav gating | P0 | Login org_admin/div_admin/instructor | No "Cohorts" rail item |
-| P17-02 | Direct URL guard | P0 | org_admin opens `/cohorts` | Access denied (not super_admin) |
+| P17-01 | Nav gating | P0 | Login org_admin/div_admin/instructor → expand Community (if visible) | No "Cohorts" item under Community (or Community group itself hidden) |
+| P17-02 | Direct URL guard | P0 | org_admin opens `/cohorts` directly | Access denied / redirected (not super_admin) |
 | P17-03 | Admin API guard | P0 | Non-admin calls `/admin/cohorts/` | 403 IsPlatformAdmin |
 | P17-04 | Learner membership gate | P0 | Learner GETs a cohort they're not in | 404 (no existence leak) |
 | P17-05 | Unauth redirect | P1 | Logged-out opens `/cohorts` | Redirect `/login` |

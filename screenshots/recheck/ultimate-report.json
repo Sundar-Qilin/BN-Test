@@ -1,0 +1,75 @@
+{
+  "adminLoginPage": {
+    "h1": [
+      "Welcome back"
+    ],
+    "h2": [
+      "Admin console"
+    ],
+    "subtitle": [
+      "Manage institutions, courses, learners, and support — one signed-in surface.",
+      "Sign in to the Budgetnista admin console.",
+      "Protected admin access only.",
+      "Protected by reCAPTCHA — Privacy & Terms"
+    ]
+  },
+  "adminDashboardURL": "https://admin.dev.budgetnista-admin.qilinlab.com/dashboard",
+  "adminSidebar": [],
+  "adminSidebarCohortItems": [],
+  "adminCohortsURL": "https://admin.dev.budgetnista-admin.qilinlab.com/login?next=%2Fcohorts",
+  "adminCohortsAuthFailed": true,
+  "learnerLoginPageH1": [
+    "Welcome back"
+  ],
+  "learnerLoginFailed": true,
+  "apiCallLog": [
+    {
+      "portal": "admin",
+      "status": 200,
+      "url": "/api/v1/admin/auth/login/",
+      "method": "POST"
+    },
+    {
+      "portal": "admin",
+      "status": 200,
+      "url": "/api/v1/admin/auth/profile/",
+      "method": "GET"
+    },
+    {
+      "portal": "admin",
+      "status": 200,
+      "url": "/api/v1/auth/tenant-redirect/",
+      "method": "GET"
+    },
+    {
+      "portal": "admin",
+      "status": 200,
+      "url": "/api/v1/notifications/unread-count/",
+      "method": "GET"
+    },
+    {
+      "portal": "learner",
+      "status": 200,
+      "url": "/api/v1/auth/login/",
+      "method": "POST"
+    },
+    {
+      "portal": "learner",
+      "status": 200,
+      "url": "/api/v1/auth/tenant-redirect/",
+      "method": "GET"
+    },
+    {
+      "portal": "learner",
+      "status": 200,
+      "url": "/api/v1/notifications/unread-count/",
+      "method": "GET"
+    },
+    {
+      "portal": "learner",
+      "status": 200,
+      "url": "/api/v1/auth/profile/",
+      "method": "GET"
+    }
+  ]
+}

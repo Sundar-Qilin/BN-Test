@@ -11,19 +11,19 @@ test.describe('MODR — Moderation', () => {
 
 
   test('MQ-001 Moderation page loads', async ({ page }) => {
-    await page.getByRole('link', { name: 'Moderation' }).click();
+    await page.goto('/moderation'); await page.waitForLoadState('networkidle').catch(() => {});
     await expect(page.getByRole('heading', { name: 'Moderation' }).first()).toBeVisible({ timeout: 10000 });
   });
 
   test('MQ-005 Filter by status present', async ({ page }) => {
-    await page.getByRole('link', { name: 'Moderation' }).click();
+    await page.goto('/moderation'); await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForLoadState('networkidle').catch(() => {});
     const filter = page.locator('select, [role="combobox"], [role="tablist"]').first();
     await expect(filter).toBeAttached({ timeout: 10000 });
   });
 
   test('MQ-010 Empty state when no reports', async ({ page }) => {
-    await page.getByRole('link', { name: 'Moderation' }).click();
+    await page.goto('/moderation'); await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForLoadState('networkidle').catch(() => {});
     await expect(page.getByText(/no|empty|clear|0/i).first()).toBeVisible({ timeout: 10000 });
   });

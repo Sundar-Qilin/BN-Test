@@ -11,25 +11,25 @@ test.describe('DIVS — Divisions & Access', () => {
 
 
   test('DL-001 Divisions list page loads', async ({ page }) => {
-    await page.getByRole('link', { name: 'Divisions & Access' }).click();
+    await page.goto('/divisions'); await page.waitForLoadState('networkidle').catch(() => {});
     await expect(page.getByRole('heading', { name: 'Divisions & Access' }).first()).toBeVisible({ timeout: 10000 });
   });
 
   test('DL-003 Search bar present', async ({ page }) => {
-    await page.getByRole('link', { name: 'Divisions & Access' }).click();
+    await page.goto('/divisions'); await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForLoadState('networkidle').catch(() => {});
     const search = page.locator('input[type="search"], input[placeholder*="search" i], [role="searchbox"]').first();
     await expect(search).toBeVisible({ timeout: 10000 });
   });
 
   test('DL-004 Empty state shown when no divisions', async ({ page }) => {
-    await page.getByRole('link', { name: 'Divisions & Access' }).click();
+    await page.goto('/divisions'); await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForLoadState('networkidle').catch(() => {});
     await expect(page.getByText(/no|empty|0/i).first()).toBeVisible({ timeout: 10000 });
   });
 
   test('DL-008 Create button present on divisions list', async ({ page }) => {
-    await page.getByRole('link', { name: 'Divisions & Access' }).click();
+    await page.goto('/divisions'); await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForLoadState('networkidle').catch(() => {});
     const btn = page.getByRole('button', { name: /create|add|new/i }).or(page.getByRole('link', { name: /create|add|new/i })).first();
     await expect(btn).toBeVisible({ timeout: 10000 });

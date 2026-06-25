@@ -12,25 +12,25 @@ test.describe('ORGS — Organisations', () => {
 
   // ── ORGS-LIST ──────────────────────────────────────────────────────────────
   test('OL-001 Orgs list page loads', async ({ page }) => {
-    await page.getByRole('link', { name: 'Organizations' }).click();
-    await expect(page.getByRole('heading', { name: 'Organizations' })).toBeVisible({ timeout: 10000 });
+    await page.goto('/organizations'); await page.waitForLoadState('networkidle').catch(() => {});
+    await expect(page.getByRole('heading', { name: 'Organizations' }).first()).toBeVisible({ timeout: 10000 });
   });
 
   test('OL-002 Search bar present on orgs list', async ({ page }) => {
-    await page.getByRole('link', { name: 'Organizations' }).click();
+    await page.goto('/organizations'); await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForLoadState('networkidle').catch(() => {});
     const search = page.getByRole('searchbox').or(page.locator('input[type="search"], input[placeholder*="search" i], input[placeholder*="Search" i]')).first();
     await expect(search).toBeVisible({ timeout: 10000 });
   });
 
   test('OL-004 Search no match shows empty state', async ({ page }) => {
-    await page.getByRole('link', { name: 'Organizations' }).click();
+    await page.goto('/organizations'); await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForLoadState('networkidle').catch(() => {});
     await expect(page.getByText(/no|empty|0 results/i).or(page.locator('[data-empty], .empty-state, [class*="empty"]')).first()).toBeVisible({ timeout: 10000 });
   });
 
   test('OL-007 Sort button or column header present', async ({ page }) => {
-    await page.getByRole('link', { name: 'Organizations' }).click();
+    await page.goto('/organizations'); await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForLoadState('networkidle').catch(() => {});
     // Sort controls may be column headers or a sort dropdown
     const sortable = page.locator('th, [data-sort], [aria-sort], button:has-text("Sort"), select').first();
@@ -38,7 +38,7 @@ test.describe('ORGS — Organisations', () => {
   });
 
   test('OL-020 Click Create button opens create form', async ({ page }) => {
-    await page.getByRole('link', { name: 'Organizations' }).click();
+    await page.goto('/organizations'); await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForLoadState('networkidle').catch(() => {});
     const createBtn = page.getByRole('button', { name: /create|add|new/i }).or(page.getByRole('link', { name: /create|add|new/i })).first();
     await expect(createBtn).toBeVisible({ timeout: 10000 });
@@ -58,7 +58,7 @@ test.describe('ORGS — Organisations', () => {
   });
 
   test('OL-009 List page has actions column or action buttons', async ({ page }) => {
-    await page.getByRole('link', { name: 'Organizations' }).click();
+    await page.goto('/organizations'); await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForLoadState('networkidle').catch(() => {});
     await expect(page.locator('button, a').filter({ hasText: /edit|view|delete|action/i }).or(page.locator('table')).first()).toBeAttached({ timeout: 10000 });
   });

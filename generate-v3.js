@@ -55,6 +55,9 @@ const sections = [
   // Billing — expanded to 4 sub-sections
   ...require('./tc3-bill'),
 
+  // Cohorts — new feature (course config, admin list, flags, detail, members, merge/split, delete, audit, learner, discussion, player, RBAC)
+  ...require('./tc-cohorts'),
+
   // Settings (already deep — 65 cases in 8 sub-areas)
   ...require('./tc2-settings'),
 
@@ -174,7 +177,7 @@ async function build() {
 
   cover.mergeCells('A1:E1');
   const t = cover.getCell('A1');
-  t.value = 'Budgetnista Admin — Complete Manual Test Suite v3';
+  t.value = 'Budgetnista Admin — Complete Manual Test Suite v4 (+ Cohorts)';
   t.font  = { name:'Calibri', size:22, bold:true, color:{ argb:'FF'+C.white } };
   t.fill  = fill(C.navy);
   t.alignment = { vertical:'middle', horizontal:'center' };
@@ -182,7 +185,7 @@ async function build() {
 
   cover.mergeCells('A2:E2');
   const sub = cover.getCell('A2');
-  sub.value = `${total} Test Cases  ·  ${sections.length} Sections  ·  Positive · Negative · Boundary · UI/UX · Validation · Security  ·  Generated 2026-06-24`;
+  sub.value = `${total} Test Cases  ·  ${sections.length} Sections  ·  Positive · Negative · Boundary · UI/UX · Validation · Security  ·  Generated 2026-06-25 (Cohorts added)`;
   sub.font  = { name:'Calibri', size:11, color:{ argb:'FF'+C.tealLt } };
   sub.fill  = fill(C.navy2);
   sub.alignment = { vertical:'middle', horizontal:'center' };
@@ -254,6 +257,7 @@ async function build() {
     'PRODUCTS': ['PROD-LIST','PROD-FORM','PROD-COUP','PROD-ANLT','PROD-STNG'],
     'TRANSACTIONS': ['TRAN-LIST','TRAN-DETL','TRAN-RFND','TRAN-EXPO'],
     'BILLING': ['BILL-PLAN','BILL-PAY','BILL-HIST','BILL-CFG'],
+    'COHORTS': ['COHT-CRSE','COHT-LIST','COHT-FLGS','COHT-DETL','COHT-MBRS','COHT-MSPL','COHT-DELT','COHT-AUDT','COHT-LRNR','COHT-DISC','COHT-PLYR','COHT-RBAC'],
     'SETTINGS': ['STNG'],
     'SECURITY / PENTEST': ['PSEC'],
   };

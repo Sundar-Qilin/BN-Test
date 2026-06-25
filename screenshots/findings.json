@@ -1,0 +1,47 @@
+{
+  "learnerLoginSuccess": false,
+  "learnerNavItems": [],
+  "learnerNavHasCohorts": false,
+  "learnerCommunityURL": "https://learner.dev.budgetnista.qilinlab.com/login?next=%2Fcommunity",
+  "learnerCommunityTabs": [],
+  "learnerRoute_community-cohorts": {
+    "url": "https://learner.dev.budgetnista.qilinlab.com/login?next=%2Fcommunity%2Fcohorts",
+    "headings": [
+      "Keep learning",
+      "Welcome back"
+    ],
+    "is404": false
+  },
+  "learnerRoute_community-groups": {
+    "url": "https://learner.dev.budgetnista.qilinlab.com/login?next=%2Fcommunity%2Fgroups",
+    "headings": [
+      "Keep learning",
+      "Welcome back"
+    ],
+    "is404": false
+  },
+  "learnerRoute_groups": {
+    "url": "https://learner.dev.budgetnista.qilinlab.com/groups",
+    "headings": [
+      "This address isn't available"
+    ],
+    "is404": false
+  },
+  "learnerRoute_cohorts": {
+    "url": "https://learner.dev.budgetnista.qilinlab.com/cohorts",
+    "headings": [
+      "This address isn't available"
+    ],
+    "is404": false
+  },
+  "learnerRoute_my-cohorts": {
+    "url": "https://learner.dev.budgetnista.qilinlab.com/my-cohorts",
+    "headings": [
+      "This address isn't available"
+    ],
+    "is404": false
+  },
+  "learnerMyCoursesURL": "https://learner.dev.budgetnista.qilinlab.com/login?next=%2Fmy-courses",
+  "learnerMyCoursesCohortChips": [],
+  "learnerError": "locator.allTextContents: Unknown engine \"text*\" while parsing selector text*=\"cohort\""
+}
